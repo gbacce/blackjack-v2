@@ -5,6 +5,7 @@ $(document).ready(function() {
 	var playersHand = [];
 	var dealersHand = [];
 	var theDeck = freshDeck.slice();
+	var activeHand = true;
 
 
 	/// DEAL BUTTON - Event Handler///
@@ -26,6 +27,12 @@ $(document).ready(function() {
 
 		calculateTotal(playersHand, 'player');
 		calculateTotal(dealersHand, 'dealer')
+	
+
+		if(calculateTotal(playersHand, 'player') == 21) {
+			dealerFlip();
+			checkWin();
+		}
 	});
 
 
@@ -105,8 +112,10 @@ $(document).ready(function() {
 	function calculateTotal(hand, who){
 		var totalHandValue = 0;
 		var thisCardValue = 0;
+		var dealerDisplay = 0;
 		var hasAce = false;
 		var totalAces = 0;
+
 		for(let i = 0; i < hand.length; i++) {
 			thisCardValue = Number(hand[i].slice(0, -1));
 
@@ -119,7 +128,12 @@ $(document).ready(function() {
 			}
 
 			totalHandValue += thisCardValue;
+
+			if((who == 'dealer') && (i == 0)) {
+				dealerDisplay += thisCardValue;
+			}
 		}
+
 		for (let i = 0; i < totalAces; i++) {
 			if(totalHandValue > 21) {
 				totalHandValue -= 10
@@ -127,7 +141,11 @@ $(document).ready(function() {
 		}
 
 		var totalToUpdate = '.' + who + '-total-number';
-		$(totalToUpdate).text(totalHandValue);
+		var totalToDisplay = totalHandValue;
+		if ((who == 'dealer') && (activeHand == true)) {
+			totalToDisplay = dealerDisplay;
+		}
+		$(totalToUpdate).text(totalToDisplay);
 		return totalHandValue;
 	}
 
@@ -143,6 +161,7 @@ $(document).ready(function() {
 	/// CHECK WIN - Utility Function ///
 
 	function checkWin() {
+		activeHand = false;
 		var playerTotal = calculateTotal(playersHand, 'player');
 		var dealerTotal = calculateTotal(dealersHand, 'dealer');
 		var winMessage = "";
@@ -209,6 +228,10 @@ $(document).ready(function() {
 		$('.dealer-total-number').html('0');
 		$('.player-total-number').html('0');
 		$('.message').text('');
+		$('.win').removeClass('win');
+		$('.bust').removeClass('bust');
+		activeHand = true;
+
 	}
 
 
