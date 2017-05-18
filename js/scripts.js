@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+	console.log("Oh you fancy, huh?")
+
 	/// MAIN VARIABLES ///
 	const freshDeck = createDeck();
 	var playersHand = [];
@@ -60,7 +62,7 @@ $(document).ready(function() {
 	$('.stand-button').click(function(){
 		dealerFlip();
 		var dealerTotal = calculateTotal(dealersHand, 'dealer');
-		while(dealerTotal < 17) {
+		while((dealerTotal < 17) && (activeHand == true)) {
 			dealersHand.push(theDeck.shift());
 			var lastCardIndex = dealersHand.length - 1;
 			var cardSlot = dealersHand.length;
@@ -101,9 +103,9 @@ $(document).ready(function() {
 
 	/// PLACE CARD - Utility Function ///
 	function placeCard(who, where, what) {
-		var cardSlot = '.' + who + '-cards .card-' + where;
-		imageTag = '<img src="images/' + what + '.png">';
-		$(cardSlot).html(imageTag);
+			var cardSlot = '.' + who + '-cards .card-' + where;
+			imageTag = '<img src="images/' + what + '.png">';
+			$(cardSlot).html(imageTag);
 	}
 
 
@@ -117,9 +119,10 @@ $(document).ready(function() {
 		var totalAces = 0;
 
 		for(let i = 0; i < hand.length; i++) {
+
 			thisCardValue = Number(hand[i].slice(0, -1));
 
-			if(thisCardValue > 10) {
+			if(thisCardValue >= 10) {
 				thisCardValue = 10;
 			} else if(thisCardValue == 1) {
 				hasAce = true;
