@@ -192,7 +192,7 @@ $(document).ready(function() {
 	/// DEALER BUST - Utility Function ///
 	function dealerBust() {
 		$('.dealer-total-number').addClass("bust");
-		$('.table').addClass('win');
+		$('.player-total-number, .table, .player-hr, .player-cards .card').addClass("win");
 	}
 
 
